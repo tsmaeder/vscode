@@ -41,7 +41,9 @@ function extractEditor(options) {
     compilerOptions.noEmit = false;
     compilerOptions.noUnusedLocals = false;
     compilerOptions.preserveConstEnums = false;
-    compilerOptions.declaration = false;
+    compilerOptions.declaration = true;
+    compilerOptions.sourceMap = true;
+    compilerOptions.declarationMap = true;
     compilerOptions.moduleResolution = ts.ModuleResolutionKind.Classic;
     options.compilerOptions = compilerOptions;
     console.log(`Running tree shaker with shakeLevel ${tss.toStringShakeLevel(options.shakeLevel)}`);
@@ -134,7 +136,7 @@ function createESMSourcesAndResources2(options) {
         }
         if (file === 'tsconfig.json') {
             const tsConfig = JSON.parse(fs.readFileSync(path.join(SRC_FOLDER, file)).toString());
-            tsConfig.compilerOptions.module = 'es6';
+            tsConfig.compilerOptions.module = 'commonjs';
             tsConfig.compilerOptions.outDir = path.join(path.relative(OUT_FOLDER, OUT_RESOURCES_FOLDER), 'vs').replace(/\\/g, '/');
             write(getDestAbsoluteFilePath(file), JSON.stringify(tsConfig, null, '\t'));
             continue;
@@ -175,6 +177,10 @@ function createESMSourcesAndResources2(options) {
                 relativePath = relativePath.replace(/\\/g, '/');
                 if (!/(^\.\/)|(^\.\.\/)/.test(relativePath)) {
                     relativePath = './' + relativePath;
+                }
+                // Added to handle imports from src/vs/editor/common/model/bracketPairsTextModelPart/bracketPairsTree/ast.ts to vs/editor/common/model.ts
+                if (!relativePath.match(/[^/.]/)) {
+                    relativePath = `../` + relativePath + '/' + path.basename(importedFilename);
                 }
                 fileContents = (fileContents.substring(0, pos + 1)
                     + relativePath
