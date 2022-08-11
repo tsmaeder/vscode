@@ -1093,8 +1093,12 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 	}
 
 	private async _setPersistentTask(task: Task): Promise<void> {
-		if (!task.configurationProperties.problemMatchers || !this._tasksReconnected) {
-			return;
+		if (!task.configurationProperties.problemMatchers || (!this._tasksReconnected)) {
+			if (!this._tasksReconnected) {
+				await this._reconnectTasks();
+			} else {
+				return;
+			}
 		}
 		let key = task.getRecentlyUsedKey();
 		if (!InMemoryTask.is(task) && key) {
