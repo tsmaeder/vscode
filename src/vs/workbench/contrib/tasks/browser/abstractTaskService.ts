@@ -1087,7 +1087,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 	}
 
 	private async _setPersistentTask(task: Task): Promise<void> {
-		if (!task.configurationProperties.problemMatchers || !this._tasksReconnected) {
+		if (!task.configurationProperties.isBackground) {
 			return;
 		}
 		let key = task.getMapKey();
