@@ -319,10 +319,12 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 			this._willRestart = e.reason !== ShutdownReason.RELOAD;
 		});
 		this._register(this.onDidStateChange(e => {
-			if ((this._willRestart || e.exitReason === TerminalExitReason.User) && e.taskId) {
-				this.removePersistentTask(e.taskId);
-			} else if (e.kind === TaskEventKind.Start && e.__task) {
-				this._setPersistentTask(e.__task);
+			if (this._tasksReconnected) {
+				if ((this._willRestart || e.exitReason === TerminalExitReason.User) && e.taskId) {
+					this.removePersistentTask(e.taskId);
+				} else if (!this._willRestart && e.kind === TaskEventKind.Active && e.__task) {
+					this._setPersistentTask(e.__task);
+				}
 			}
 		}));
 		this._waitForSupportedExecutions = new Promise(resolve => {
@@ -931,6 +933,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 
 	private _getPersistentTasks(): LRUCache<string, string> {
 		if (this._persistentTasks) {
+			this._logService.info('return persistent tasks', Array.from(this._persistentTasks.keys()));
 			return this._persistentTasks;
 		}
 		//TODO: should this # be configurable?
@@ -948,6 +951,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 				// Ignore. We use the empty result
 			}
 		}
+		this._logService.info('return persistent tasks', Array.from(this._persistentTasks.keys()));
 		return this._persistentTasks;
 	}
 
@@ -1104,6 +1108,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 			// for contributed tasks get attached later
 			// they're set to [] for this case,
 			// so checking if they're defined is sufficient
+			this._logService.info('setting persistent task', task._label, key, task.configurationProperties.problemMatchers);
 			if (!task.configurationProperties.problemMatchers) {
 				return;
 			}

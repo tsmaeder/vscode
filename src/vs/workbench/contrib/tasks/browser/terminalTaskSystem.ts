@@ -270,8 +270,9 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 	}
 
 	public reconnect(task: Task, resolver: ITaskResolver): ITaskExecuteResult {
-		if (!this._reconnectedTerminals?.length) {
-			throw new Error('Persistent tasks were not updated correctly - no terminals for reconnection');
+		if (!this._hasReconnected) {
+			this._logService.info('Has not reconnected when reconnect is called', this._terminalService.getReconnectedTerminals(ReconnectionType)?.map(i => `${i.instanceId}, ${i.isDisposed}`));
+			this._reconnectToTerminals();
 		}
 		return this.run(task, resolver, Triggers.reconnect);
 	}
