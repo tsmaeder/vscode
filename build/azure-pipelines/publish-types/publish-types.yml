@@ -32,7 +32,7 @@ steps:
       password $(github-distro-mixin-password)" > ~/.netrc
       git config --global user.email "vscode@microsoft.com"
       git config --global user.name "vscode"
-      "$(github-distro-mixin-password)" | gh auth login --with-token
+      # "$(github-distro-mixin-password)" | gh auth login --with-token
     displayName: Prepare tooling
 
   - bash: |
@@ -75,22 +75,22 @@ steps:
 
     displayName: Push update to DefinitelyTyped
 
-  - pwsh: |
-      $tagVersion = git describe --tags $(git rev-list --tags --max-count=1)
-      $body = "Please fill in this template.
-      * [x]  Use a meaningful title for the pull request. Include the name of the package modified.
-      * [x]  Test the change in your own code. (Compile and run.)
-      * [x]  [Add or edit tests](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md#my-package-teststs) to reflect the change.
-      * [x]  Follow the advice from the [readme](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md#make-a-pull-request).
-      * [x]  Avoid [common mistakes](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md#common-mistakes).
-      * [x]  [Run `npm test <package to test>`](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md#running-tests).
-      Select one of these and delete the others:
+  # - pwsh: |
+  #     $tagVersion = git describe --tags $(git rev-list --tags --max-count=1)
+  #     $body = "Please fill in this template.
+  #     * [x]  Use a meaningful title for the pull request. Include the name of the package modified.
+  #     * [x]  Test the change in your own code. (Compile and run.)
+  #     * [x]  [Add or edit tests](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md#my-package-teststs) to reflect the change.
+  #     * [x]  Follow the advice from the [readme](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md#make-a-pull-request).
+  #     * [x]  Avoid [common mistakes](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md#common-mistakes).
+  #     * [x]  [Run `npm test <package to test>`](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/README.md#running-tests).
+  #     Select one of these and delete the others:
 
-      If changing an existing definition:
+  #     If changing an existing definition:
 
-      * [x]  Provide a URL to documentation or source code which provides context for the suggested changes: https://github.com/microsoft/vscode/tree/release/$tagVersion
-      * [x]  If this PR brings the type definitions up to date with a new version of the JS library, update the version number in the header."
+  #     * [x]  Provide a URL to documentation or source code which provides context for the suggested changes: https://github.com/microsoft/vscode/tree/release/$tagVersion
+  #     * [x]  If this PR brings the type definitions up to date with a new version of the JS library, update the version number in the header."
 
-      gh pr create --title "Update VS Code typings for VS Code $tagVersion" --body $body --reviewer kieferrm
-      gh pr merge --auto --delete-branch --squash
-    displayName: Create PR to DefinitelyTyped
+  #     gh pr create --title "Update VS Code typings for VS Code $tagVersion" --body $body --reviewer kieferrm
+  #     gh pr merge --auto --delete-branch --squash
+  #   displayName: Create PR to DefinitelyTyped
