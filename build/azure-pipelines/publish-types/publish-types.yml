@@ -10,23 +10,29 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+  - checkout: self
+    persistCredentials: true
+
   - task: NodeTool@0
     inputs:
       versionSpec: "16.x"
 
-  - checkout: self
-    persistCredentials: true
+  - task: AzureKeyVault@1
+    displayName: "Azure Key Vault: Get Secrets"
+    inputs:
+      azureSubscription: "vscode-builds-subscription"
+      KeyVaultName: vscode
+      SecretsFilter: "github-distro-mixin-password"
 
   - pwsh: |
       $result = git config --get-regexp .*extraheader ^AUTHORIZATION:
       $token = $result -split "AUTHORIZATION: basic " | Select-Object -Last 1
-      $pat = [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($token)) -split ":" | Select-Object -Last 1
       "machine github.com
       login vscode
-      password $pat" > ~/.netrc
+      password $(github-distro-mixin-password)" > ~/.netrc
       git config --global user.email "vscode@microsoft.com"
       git config --global user.name "vscode"
-      $pat | gh auth login --with-token
+      "$(github-distro-mixin-password)" | gh auth login --with-token
     displayName: Prepare tooling
 
   - bash: |
