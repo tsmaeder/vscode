@@ -403,7 +403,7 @@ export class ViewModel extends Disposable implements IViewModel {
 			this._tokenizeViewportSoon.schedule();
 		}));
 
-		this._register(this.model.onDidChangeTokens((e) => {
+		this._register(this.model.onDidChangeTokensDeferred((e) => {
 			const viewRanges: { fromLineNumber: number; toLineNumber: number }[] = [];
 			for (let j = 0, lenJ = e.ranges.length; j < lenJ; j++) {
 				const modelRange = e.ranges[j];

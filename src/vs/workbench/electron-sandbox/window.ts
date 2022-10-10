@@ -313,7 +313,7 @@ export class NativeWindow extends Disposable {
 		}
 
 		// Document edited: indicate for dirty working copies
-		this._register(this.workingCopyService.onDidChangeDirty(workingCopy => {
+		this._register(this.workingCopyService.onDidChangeDirtyDeferred(workingCopy => {
 			const gotDirty = workingCopy.isDirty();
 			if (gotDirty && !(workingCopy.capabilities & WorkingCopyCapabilities.Untitled) && this.filesConfigurationService.getAutoSaveMode() === AutoSaveMode.AFTER_SHORT_DELAY) {
 				return; // do not indicate dirty of working copies that are auto saved after short delay

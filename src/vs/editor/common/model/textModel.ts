@@ -6,6 +6,7 @@
 import { ArrayQueue, pushMany } from 'vs/base/common/arrays';
 import { VSBuffer, VSBufferReadableStream } from 'vs/base/common/buffer';
 import { Color } from 'vs/base/common/color';
+import { memoize } from 'vs/base/common/decorators';
 import { onUnexpectedError } from 'vs/base/common/errors';
 import { Emitter, Event } from 'vs/base/common/event';
 import { IMarkdownString } from 'vs/base/common/htmlContent';
@@ -222,6 +223,8 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 	public get onDidChangeLanguage() { return this._tokenizationTextModelPart.onDidChangeLanguage; }
 	public get onDidChangeLanguageConfiguration() { return this._tokenizationTextModelPart.onDidChangeLanguageConfiguration; }
 	public get onDidChangeTokens() { return this._tokenizationTextModelPart.onDidChangeTokens; }
+	@memoize
+	public get onDidChangeTokensDeferred() { return Event.defer(this._tokenizationTextModelPart.onDidChangeTokens); }
 
 	private readonly _onDidChangeOptions: Emitter<IModelOptionsChangedEvent> = this._register(new Emitter<IModelOptionsChangedEvent>());
 	public readonly onDidChangeOptions: Event<IModelOptionsChangedEvent> = this._onDidChangeOptions.event;
@@ -234,6 +237,10 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 	private readonly _eventEmitter: DidChangeContentEmitter = this._register(new DidChangeContentEmitter());
 	public onDidChangeContent(listener: (e: IModelContentChangedEvent) => void): IDisposable {
 		return this._eventEmitter.slowEvent((e: InternalModelContentChangeEvent) => listener(e.contentChangedEvent));
+	}
+	private _onDidChangeContentDeferred = Event.defer(this._eventEmitter.slowEvent);
+	public onDidChangeContentDeferred(listener: (e: IModelContentChangedEvent) => void): IDisposable {
+		return this._onDidChangeContentDeferred((e: InternalModelContentChangeEvent) => listener(e.contentChangedEvent));
 	}
 	public onDidChangeContentOrInjectedText(listener: (e: InternalModelContentChangeEvent | ModelInjectedTextChangedEvent) => void): IDisposable {
 		return combinedDisposable(
@@ -2305,6 +2312,7 @@ function _normalizeOptions(options: model.IModelDecorationOptions): ModelDecorat
 
 export class DidChangeDecorationsEmitter extends Disposable {
 
+	// TODO: Defer some listeners
 	private readonly _actual: Emitter<IModelDecorationsChangedEvent> = this._register(new Emitter<IModelDecorationsChangedEvent>());
 	public readonly event: Event<IModelDecorationsChangedEvent> = this._actual.event;
 
@@ -2383,9 +2391,11 @@ export class DidChangeContentEmitter extends Disposable {
 	 * Both `fastEvent` and `slowEvent` work the same way and contain the same events, but first we invoke `fastEvent` and then `slowEvent`.
 	 */
 	private readonly _fastEmitter: Emitter<InternalModelContentChangeEvent> = this._register(new Emitter<InternalModelContentChangeEvent>());
-	public readonly fastEvent: Event<InternalModelContentChangeEvent> = this._fastEmitter.event;
+	// TODO: Safe?
+	public readonly fastEvent: Event<InternalModelContentChangeEvent> = Event.defer(this._fastEmitter.event);
 	private readonly _slowEmitter: Emitter<InternalModelContentChangeEvent> = this._register(new Emitter<InternalModelContentChangeEvent>());
-	public readonly slowEvent: Event<InternalModelContentChangeEvent> = this._slowEmitter.event;
+	// TODO: safe? Defer fast emitter's event?
+	public readonly slowEvent: Event<InternalModelContentChangeEvent> = Event.defer(this._slowEmitter.event);
 
 	private _deferredCnt: number;
 	private _deferredEvent: InternalModelContentChangeEvent | null;

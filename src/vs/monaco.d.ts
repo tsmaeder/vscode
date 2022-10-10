@@ -2096,6 +2096,7 @@ declare namespace monaco.editor {
 		 * @event
 		 */
 		onDidChangeContent(listener: (e: IModelContentChangedEvent) => void): IDisposable;
+		onDidChangeContentDeferred(listener: (e: IModelContentChangedEvent) => void): IDisposable;
 		/**
 		 * An event emitted when decorations of the model have changed.
 		 * @event

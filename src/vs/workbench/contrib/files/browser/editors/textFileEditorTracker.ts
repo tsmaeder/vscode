@@ -39,8 +39,9 @@ export class TextFileEditorTracker extends Disposable implements IWorkbenchContr
 	private registerListeners(): void {
 
 		// Ensure dirty text file and untitled models are always opened as editors
-		this._register(this.textFileService.files.onDidChangeDirty(model => this.ensureDirtyFilesAreOpenedWorker.work(model.resource)));
+		this._register(this.textFileService.files.onDidChangeDirtyDeferred(model => this.ensureDirtyFilesAreOpenedWorker.work(model.resource)));
 		this._register(this.textFileService.files.onDidSaveError(model => this.ensureDirtyFilesAreOpenedWorker.work(model.resource)));
+		// TODO: Handle untitled too
 		this._register(this.textFileService.untitled.onDidChangeDirty(model => this.ensureDirtyFilesAreOpenedWorker.work(model.resource)));
 
 		// Update visible text file editors when focus is gained

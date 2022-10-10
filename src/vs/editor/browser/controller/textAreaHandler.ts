@@ -575,7 +575,10 @@ export class TextAreaHandler extends ViewPart {
 	public override onCursorStateChanged(e: viewEvents.ViewCursorStateChangedEvent): boolean {
 		this._selections = e.selections.slice(0);
 		this._modelSelections = e.modelSelections.slice(0);
+		// TODO: setTimeout if accessibility support is false?
+		// setTimeout(() => {
 		this._textAreaInput.writeScreenReaderContent('selection changed');
+		// }, 0);
 		return true;
 	}
 	public override onDecorationsChanged(e: viewEvents.ViewDecorationsChangedEvent): boolean {

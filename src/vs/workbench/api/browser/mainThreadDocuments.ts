@@ -139,7 +139,8 @@ export class MainThreadDocuments extends Disposable implements MainThreadDocumen
 				this._proxy.$acceptModelSaved(e.model.resource);
 			}
 		}));
-		this._store.add(_textFileService.files.onDidChangeDirty(m => {
+		// TODO: Is this safe?
+		this._store.add(_textFileService.files.onDidChangeDirtyDeferred(m => {
 			if (this._shouldHandleFileEvent(m.resource)) {
 				this._proxy.$acceptDirtyStateChanged(m.resource, m.isDirty());
 			}

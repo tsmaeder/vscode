@@ -52,7 +52,7 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 		// Working Copy events
 		this._register(this.workingCopyService.onDidRegister(workingCopy => this.onDidRegister(workingCopy)));
 		this._register(this.workingCopyService.onDidUnregister(workingCopy => this.onDidUnregister(workingCopy)));
-		this._register(this.workingCopyService.onDidChangeDirty(workingCopy => this.onDidChangeDirty(workingCopy)));
+		this._register(this.workingCopyService.onDidChangeDirtyDeferred(workingCopy => this.onDidChangeDirty(workingCopy)));
 		this._register(this.workingCopyService.onDidChangeContent(workingCopy => this.onDidChangeContent(workingCopy)));
 
 		// Lifecycle

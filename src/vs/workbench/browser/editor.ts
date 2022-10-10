@@ -240,7 +240,7 @@ export function whenEditorClosed(accessor: ServicesAccessor, resources: URI[]): 
 						}
 
 						// Otherwise resolve promise when resource is saved
-						const listener = workingCopyService.onDidChangeDirty(workingCopy => {
+						const listener = workingCopyService.onDidChangeDirtyDeferred(workingCopy => {
 							if (!workingCopy.isDirty() && uriIdentityService.extUri.isEqual(resource, workingCopy.resource)) {
 								listener.dispose();
 

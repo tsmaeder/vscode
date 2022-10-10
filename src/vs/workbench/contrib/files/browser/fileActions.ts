@@ -536,7 +536,7 @@ export abstract class BaseSaveAllAction extends Action {
 	private registerListeners(): void {
 
 		// update enablement based on working copy changes
-		this._register(this.workingCopyService.onDidChangeDirty(workingCopy => this.updateEnablement(workingCopy)));
+		this._register(this.workingCopyService.onDidChangeDirtyDeferred(workingCopy => this.updateEnablement(workingCopy)));
 	}
 
 	private updateEnablement(workingCopy: IWorkingCopy): void {

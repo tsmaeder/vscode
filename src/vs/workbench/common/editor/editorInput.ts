@@ -42,6 +42,7 @@ export interface IEditorCloseHandler {
  */
 export abstract class EditorInput extends AbstractEditorInput {
 
+	// TODO: Defer some?
 	protected readonly _onDidChangeDirty = this._register(new Emitter<void>());
 	protected readonly _onDidChangeLabel = this._register(new Emitter<void>());
 	protected readonly _onDidChangeCapabilities = this._register(new Emitter<void>());

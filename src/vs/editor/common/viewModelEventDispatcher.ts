@@ -6,7 +6,7 @@
 import { ViewEventHandler } from 'vs/editor/common/viewEventHandler';
 import { ViewEvent } from 'vs/editor/common/viewEvents';
 import { IContentSizeChangedEvent } from 'vs/editor/common/editorCommon';
-import { Emitter } from 'vs/base/common/event';
+import { Emitter, Event } from 'vs/base/common/event';
 import { Selection } from 'vs/editor/common/core/selection';
 import { Disposable } from 'vs/base/common/lifecycle';
 import { CursorChangeReason } from 'vs/editor/common/cursorEvents';
@@ -14,8 +14,9 @@ import { IModelContentChangedEvent, IModelDecorationsChangedEvent, IModelLanguag
 
 export class ViewModelEventDispatcher extends Disposable {
 
+	// TODO: Defer some listeners?
 	private readonly _onEvent = this._register(new Emitter<OutgoingViewModelEvent>());
-	public readonly onEvent = this._onEvent.event;
+	public readonly onEvent = Event.defer(this._onEvent.event);
 
 	private readonly _eventHandlers: ViewEventHandler[];
 	private _viewEventQueue: ViewEvent[] | null;

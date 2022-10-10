@@ -1094,6 +1094,10 @@ export interface ITextModel {
 	 * @event
 	 */
 	onDidChangeContent(listener: (e: IModelContentChangedEvent) => void): IDisposable;
+
+	// TODO: Is this safe?
+	onDidChangeContentDeferred(listener: (e: IModelContentChangedEvent) => void): IDisposable;
+
 	/**
 	 * An event emitted when decorations of the model have changed.
 	 * @event
@@ -1120,6 +1124,12 @@ export interface ITextModel {
 	 * @internal
 	 */
 	readonly onDidChangeTokens: Event<IModelTokensChangedEvent>;
+	/**
+	 * An event emitted when the tokens associated with the model have changed.
+	 * @event
+	 * @internal
+	 */
+	readonly onDidChangeTokensDeferred: Event<IModelTokensChangedEvent>;
 	/**
 	 * An event emitted when the model has been attached to the first editor or detached from the last editor.
 	 * @event

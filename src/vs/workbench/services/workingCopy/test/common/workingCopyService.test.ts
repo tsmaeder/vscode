@@ -15,7 +15,7 @@ suite('WorkingCopyService', () => {
 		const service = new WorkingCopyService();
 
 		const onDidChangeDirty: IWorkingCopy[] = [];
-		service.onDidChangeDirty(copy => onDidChangeDirty.push(copy));
+		service.onDidChangeDirtyDeferred(copy => onDidChangeDirty.push(copy));
 
 		const onDidChangeContent: IWorkingCopy[] = [];
 		service.onDidChangeContent(copy => onDidChangeContent.push(copy));

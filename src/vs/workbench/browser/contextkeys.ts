@@ -254,7 +254,7 @@ export class WorkbenchContextKeysHandler extends Disposable {
 			this.auxiliaryBarVisibleContext.set(this.layoutService.isVisible(Parts.AUXILIARYBAR_PART));
 		}));
 
-		this._register(this.workingCopyService.onDidChangeDirty(workingCopy => this.dirtyWorkingCopiesContext.set(workingCopy.isDirty() || this.workingCopyService.hasDirty)));
+		this._register(this.workingCopyService.onDidChangeDirtyDeferred(workingCopy => this.dirtyWorkingCopiesContext.set(workingCopy.isDirty() || this.workingCopyService.hasDirty)));
 	}
 
 	private updateEditorAreaContextKeys(): void {

@@ -39,6 +39,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 
 	private readonly _onDidChangeDirty = this._register(new Emitter<TextFileEditorModel>());
 	readonly onDidChangeDirty = this._onDidChangeDirty.event;
+	readonly onDidChangeDirtyDeferred = Event.defer(this._onDidChangeDirty.event);
 
 	private readonly _onDidChangeReadonly = this._register(new Emitter<TextFileEditorModel>());
 	readonly onDidChangeReadonly = this._onDidChangeReadonly.event;

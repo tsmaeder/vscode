@@ -34,7 +34,7 @@ export class DirtyFilesIndicator extends Disposable implements IWorkbenchContrib
 	private registerListeners(): void {
 
 		// Working copy dirty indicator
-		this._register(this.workingCopyService.onDidChangeDirty(workingCopy => this.onWorkingCopyDidChangeDirty(workingCopy)));
+		this._register(this.workingCopyService.onDidChangeDirtyDeferred(workingCopy => this.onWorkingCopyDidChangeDirty(workingCopy)));
 
 		// Lifecycle
 		this.lifecycleService.onDidShutdown(() => this.dispose());

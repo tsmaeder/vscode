@@ -44,6 +44,13 @@ export interface IWorkingCopyService {
 	readonly onDidChangeDirty: Event<IWorkingCopy>;
 
 	/**
+	 * An event for when a working copy dirty state changed. This is deferred to
+	 * a following task via `setTimeout` and should be used for non-critical
+	 * listeners such as UI updates or scheduling a task.
+	 */
+	readonly onDidChangeDirtyDeferred: Event<IWorkingCopy>;
+
+	/**
 	 * An event for when a working copy's content changed.
 	 */
 	readonly onDidChangeContent: Event<IWorkingCopy>;
@@ -139,6 +146,7 @@ export class WorkingCopyService extends Disposable implements IWorkingCopyServic
 
 	private readonly _onDidChangeDirty = this._register(new Emitter<IWorkingCopy>());
 	readonly onDidChangeDirty = this._onDidChangeDirty.event;
+	readonly onDidChangeDirtyDeferred = Event.defer(this._onDidChangeDirty.event);
 
 	private readonly _onDidChangeContent = this._register(new Emitter<IWorkingCopy>());
 	readonly onDidChangeContent = this._onDidChangeContent.event;

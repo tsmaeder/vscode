@@ -112,7 +112,7 @@ suite('Files - TextFileEditorModel', () => {
 		assert.strictEqual(accessor.workingCopyService.isDirty(model.resource, model.typeId), true);
 
 		let workingCopyEvent = false;
-		accessor.workingCopyService.onDidChangeDirty(e => {
+		accessor.workingCopyService.onDidChangeDirtyDeferred(e => {
 			if (e.resource.toString() === model.resource.toString()) {
 				workingCopyEvent = true;
 			}
@@ -153,7 +153,7 @@ suite('Files - TextFileEditorModel', () => {
 		model.onDidSave(() => savedEvent = true);
 
 		let workingCopyEvent = false;
-		accessor.workingCopyService.onDidChangeDirty(e => {
+		accessor.workingCopyService.onDidChangeDirtyDeferred(e => {
 			if (e.resource.toString() === model.resource.toString()) {
 				workingCopyEvent = true;
 			}
@@ -451,7 +451,7 @@ suite('Files - TextFileEditorModel', () => {
 		model.onDidRevert(() => eventCounter++);
 
 		let workingCopyEvent = false;
-		accessor.workingCopyService.onDidChangeDirty(e => {
+		accessor.workingCopyService.onDidChangeDirtyDeferred(e => {
 			if (e.resource.toString() === model.resource.toString()) {
 				workingCopyEvent = true;
 			}
@@ -491,7 +491,7 @@ suite('Files - TextFileEditorModel', () => {
 		model.onDidRevert(() => eventCounter++);
 
 		let workingCopyEvent = false;
-		accessor.workingCopyService.onDidChangeDirty(e => {
+		accessor.workingCopyService.onDidChangeDirtyDeferred(e => {
 			if (e.resource.toString() === model.resource.toString()) {
 				workingCopyEvent = true;
 			}
@@ -557,7 +557,7 @@ suite('Files - TextFileEditorModel', () => {
 		model.onDidChangeDirty(() => eventCounter++);
 
 		let workingCopyEvent = false;
-		accessor.workingCopyService.onDidChangeDirty(e => {
+		accessor.workingCopyService.onDidChangeDirtyDeferred(e => {
 			if (e.resource.toString() === model.resource.toString()) {
 				workingCopyEvent = true;
 			}
@@ -577,7 +577,7 @@ suite('Files - TextFileEditorModel', () => {
 
 	test('No Dirty or saving for readonly models', async function () {
 		let workingCopyEvent = false;
-		accessor.workingCopyService.onDidChangeDirty(e => {
+		accessor.workingCopyService.onDidChangeDirtyDeferred(e => {
 			if (e.resource.toString() === model.resource.toString()) {
 				workingCopyEvent = true;
 			}

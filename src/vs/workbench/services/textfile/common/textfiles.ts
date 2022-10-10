@@ -332,6 +332,7 @@ export interface ITextFileEditorModelManager {
 	readonly onDidCreate: Event<ITextFileEditorModel>;
 	readonly onDidResolve: Event<ITextFileResolveEvent>;
 	readonly onDidChangeDirty: Event<ITextFileEditorModel>;
+	readonly onDidChangeDirtyDeferred: Event<ITextFileEditorModel>;
 	readonly onDidChangeReadonly: Event<ITextFileEditorModel>;
 	readonly onDidRemove: Event<URI>;
 	readonly onDidChangeOrphaned: Event<ITextFileEditorModel>;
