@@ -577,11 +577,13 @@ async function resolveNlsConfiguration() {
 			// @ts-ignore API not yet available in the official Electron
 			app.getSystemLocale() : app.getLocale();
 		if (!appLocale) {
+			console.log('No appLocale. Switching nlsConfiguration locale to en.');
 			nlsConfiguration = { locale: 'en', availableLanguages: {} };
 		} else {
-
 			// See above the comment about the loader and case sensitiveness
 			appLocale = appLocale.toLowerCase();
+
+			console.log('appLocale from Electron lowercased: ' + appLocale);
 
 			const { getNLSConfiguration } = require('./vs/base/node/languagePacks');
 			nlsConfiguration = await getNLSConfiguration(product.commit, userDataPath, metaDataFile, appLocale);

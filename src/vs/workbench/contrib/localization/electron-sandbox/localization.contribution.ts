@@ -28,6 +28,7 @@ import { ClearDisplayLanguageAction, ConfigureDisplayLanguageAction } from 'vs/w
 import { InstantiationType, registerSingleton } from 'vs/platform/instantiation/common/extensions';
 import { ILocaleService } from 'vs/workbench/contrib/localization/common/locale';
 import { NativeLocaleService } from 'vs/workbench/contrib/localization/electron-sandbox/localeService';
+import { ILogService } from 'vs/platform/log/common/log';
 
 registerSingleton(ILocaleService, NativeLocaleService, InstantiationType.Delayed);
 
@@ -48,6 +49,7 @@ export class LocalizationWorkbenchContribution extends Disposable implements IWo
 		@IExtensionGalleryService private readonly galleryService: IExtensionGalleryService,
 		@IPaneCompositePartService private readonly paneCompositeService: IPaneCompositePartService,
 		@ITelemetryService private readonly telemetryService: ITelemetryService,
+		@ILogService private readonly logService: ILogService,
 	) {
 		super();
 
@@ -89,6 +91,10 @@ export class LocalizationWorkbenchContribution extends Disposable implements IWo
 		// The locale can contain extraneous country codes, such as fr-CA
 		const language = platform.language;
 		const locale = platform.locale;
+
+		this.logService.info('checkAndInstall language: ' + language);
+		this.logService.info('checkAndInstall locale: ' + locale);
+
 		const languagePackSuggestionIgnoreList = <string[]>JSON.parse(this.storageService.get(LANGUAGEPACK_SUGGESTION_IGNORE_STORAGE_KEY, StorageScope.APPLICATION, '[]'));
 
 		if (!this.galleryService.isEnabled()) {
