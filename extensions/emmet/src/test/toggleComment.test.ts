@@ -6,7 +6,7 @@
 import 'mocha';
 import * as assert from 'assert';
 import { Selection } from 'vscode';
-import { withRandomFileEditor, closeAllEditors } from './testUtils';
+import { withRandomFileEditor, closeAllEditors } from './utils';
 import { toggleComment as toggleCommentImpl } from '../toggleComment';
 
 function toggleComment(): Thenable<boolean> {

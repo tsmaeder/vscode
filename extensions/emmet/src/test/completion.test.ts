@@ -7,7 +7,7 @@ import * as assert from 'assert';
 import 'mocha';
 import { CancellationTokenSource, CompletionTriggerKind, Selection } from 'vscode';
 import { DefaultCompletionItemProvider } from '../defaultCompletionProvider';
-import { closeAllEditors, withRandomFileEditor } from './testUtils';
+import { closeAllEditors, withRandomFileEditor } from './utils';
 
 const completionProvider = new DefaultCompletionItemProvider();
 

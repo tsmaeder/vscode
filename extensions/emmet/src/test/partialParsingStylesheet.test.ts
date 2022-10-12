@@ -5,7 +5,7 @@
 
 import 'mocha';
 import * as assert from 'assert';
-import { closeAllEditors, withRandomFileEditor } from './testUtils';
+import { closeAllEditors, withRandomFileEditor } from './utils';
 import * as vscode from 'vscode';
 import { parsePartialStylesheet, getFlatNode } from '../util';
 import { isValidLocationForEmmetAbbreviation } from '../abbreviationActions';

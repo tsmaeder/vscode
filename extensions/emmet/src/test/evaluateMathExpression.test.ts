@@ -6,7 +6,7 @@
 import 'mocha';
 import * as assert from 'assert';
 import { Position, Selection } from 'vscode';
-import { withRandomFileEditor, closeAllEditors } from './testUtils';
+import { withRandomFileEditor, closeAllEditors } from './utils';
 import { evaluateMathExpression } from '../evaluateMathExpression';
 
 suite('Tests for Evaluate Math Expression', () => {

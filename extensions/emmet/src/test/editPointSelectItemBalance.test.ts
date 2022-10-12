@@ -6,7 +6,7 @@
 import 'mocha';
 import * as assert from 'assert';
 import { Selection } from 'vscode';
-import { withRandomFileEditor, closeAllEditors } from './testUtils';
+import { withRandomFileEditor, closeAllEditors } from './utils';
 import { fetchEditPoint } from '../editPoint';
 import { fetchSelectItem } from '../selectItem';
 import { balanceOut, balanceIn } from '../balance';

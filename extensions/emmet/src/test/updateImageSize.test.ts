@@ -6,7 +6,7 @@
 import 'mocha';
 import * as assert from 'assert';
 import { Selection } from 'vscode';
-import { withRandomFileEditor, closeAllEditors } from './testUtils';
+import { withRandomFileEditor, closeAllEditors } from './utils';
 import { updateImageSize } from '../updateImageSize';
 
 suite('Tests for Emmet actions on html tags', () => {

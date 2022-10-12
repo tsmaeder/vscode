@@ -6,7 +6,7 @@
 import 'mocha';
 import * as assert from 'assert';
 import { Selection } from 'vscode';
-import { withRandomFileEditor, closeAllEditors } from './testUtils';
+import { withRandomFileEditor, closeAllEditors } from './utils';
 import { incrementDecrement as incrementDecrementImpl } from '../incrementDecrement';
 
 function incrementDecrement(delta: number): Thenable<boolean> {
