@@ -5116,6 +5116,12 @@ declare namespace monaco.editor {
 		 */
 		readonly onDidChangeModelContent: IEvent<IModelContentChangedEvent>;
 		/**
+		 * An event emitted when the content of the current model has changed. This is a debounced
+		 * signal (void return) as using the the event type could be dangerous.
+		 * @event
+		 */
+		readonly onDidChangeModelContentDeferred: IEvent<void>;
+		/**
 		 * An event emitted when the language of the current model has changed.
 		 * @event
 		 */

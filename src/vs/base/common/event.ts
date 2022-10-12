@@ -60,6 +60,10 @@ export namespace Event {
 	// eslint-disable-next-line prefer-const
 	export let enableDefer: boolean = false;
 
+	export function defer(event: Event<unknown>): Event<void> {
+		return debounce(signal(event), () => { }, 0);
+	}
+
 	/**
 	 * Given an event, returns another event which defers the listener to a later task via a shared `setTimeout`. This
 	 * is useful for deferring non-critical work (eg. general UI updates) to ensure it does not block critical work (eg.
@@ -68,29 +72,29 @@ export namespace Event {
 	 * *NOTE* when using this it's important to consider race conditions that could arise when using related deferred
 	 * and non-deferred events.
 	 */
-	export function defer<T>(event: Event<T>): Event<T> {
-		const listeners: { listener: (e: T) => any; thisArgs?: any; disposables?: IDisposable[] | DisposableStore }[] = [];
-		let primaryListener: IDisposable | undefined;
-		return (listener, thisArgs = null, disposables?) => {
-			listeners.push({ listener, thisArgs, disposables });
-			if (!primaryListener) {
-				primaryListener = event(e => {
-					if (enableDefer) {
-						setTimeout(() => {
-							for (const l of listeners) {
-								l.listener.call(l.thisArgs, e);
-							}
-						}, 0);
-					} else {
-						for (const l of listeners) {
-							l.listener.call(l.thisArgs, e);
-						}
-					}
-				});
-			}
-			return primaryListener;
-		};
-	}
+	// export function defer<T>(event: Event<T>): Event<T> {
+	// 	const listeners: { listener: (e: T) => any; thisArgs?: any; disposables?: IDisposable[] | DisposableStore }[] = [];
+	// 	let primaryListener: IDisposable | undefined;
+	// 	return (listener, thisArgs = null, disposables?) => {
+	// 		listeners.push({ listener, thisArgs, disposables });
+	// 		if (!primaryListener) {
+	// 			primaryListener = event(e => {
+	// 				if (enableDefer) {
+	// 					setTimeout(() => {
+	// 						for (const l of listeners) {
+	// 							l.listener.call(l.thisArgs, e);
+	// 						}
+	// 					}, 0);
+	// 				} else {
+	// 					for (const l of listeners) {
+	// 						l.listener.call(l.thisArgs, e);
+	// 					}
+	// 				}
+	// 			});
+	// 		}
+	// 		return primaryListener;
+	// 	};
+	// }
 
 	/**
 	 * Given an event, returns another event which only fires once.

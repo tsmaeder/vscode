@@ -494,6 +494,12 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	 */
 	readonly onDidChangeModelContent: Event<IModelContentChangedEvent>;
 	/**
+	 * An event emitted when the content of the current model has changed. This is a debounced
+	 * signal (void return) as using the the event type could be dangerous.
+	 * @event
+	 */
+	readonly onDidChangeModelContentDeferred: Event<void>;
+	/**
 	 * An event emitted when the language of the current model has changed.
 	 * @event
 	 */

@@ -634,7 +634,7 @@ export class CommentController implements IEditorContribution {
 				this._computeCommentingRangeScheduler = null;
 			}
 		});
-		this.localToDispose.add(this.editor.onDidChangeModelContent(async () => {
+		this.localToDispose.add(this.editor.onDidChangeModelContentDeferred(async () => {
 			this.beginComputeCommentingRanges();
 		}));
 		this.localToDispose.add(this.commentService.onDidUpdateCommentThreads(async e => {
