@@ -6,6 +6,7 @@
 import 'vs/editor/browser/coreCommands';
 import 'vs/editor/browser/widget/codeEditor/codeEditorWidget';
 import 'vs/editor/browser/widget/diffEditor/diffEditor.contribution';
+import 'vs/editor/browser/widget/diffEditor/embeddedDiffEditorWidget';
 import 'vs/editor/contrib/anchorSelect/browser/anchorSelect';
 import 'vs/editor/contrib/bracketMatching/browser/bracketMatching';
 import 'vs/editor/contrib/caretOperations/browser/caretOperations';
