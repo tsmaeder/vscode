@@ -45,7 +45,8 @@ export function extractEditor(options: tss.ITreeShakingOptions & { destRoot: str
 	compilerOptions.noEmit = false;
 	compilerOptions.noUnusedLocals = false;
 	compilerOptions.preserveConstEnums = false;
-	compilerOptions.declaration = false;
+	compilerOptions.declaration = true;
+	compilerOptions.sourceMap = true;
 	compilerOptions.moduleResolution = ts.ModuleResolutionKind.Classic;
 
 
@@ -153,7 +154,7 @@ export function createESMSourcesAndResources2(options: IOptions2): void {
 
 		if (file === 'tsconfig.json') {
 			const tsConfig = JSON.parse(fs.readFileSync(path.join(SRC_FOLDER, file)).toString());
-			tsConfig.compilerOptions.module = 'es2022';
+			tsConfig.compilerOptions.module = 'commonjs';
 			tsConfig.compilerOptions.outDir = path.join(path.relative(OUT_FOLDER, OUT_RESOURCES_FOLDER), 'vs').replace(/\\/g, '/');
 			write(getDestAbsoluteFilePath(file), JSON.stringify(tsConfig, null, '\t'));
 			continue;

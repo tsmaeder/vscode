@@ -76,7 +76,7 @@ const extractEditorSrcTask = task.define('extract-editor-src', () => {
 			apiusages,
 			extrausages
 		],
-		shakeLevel: 2, // 0-Files, 1-InnerFile, 2-ClassMembers
+		shakeLevel: 0, // 0-Files, 1-InnerFile, 2-ClassMembers
 		importIgnorePattern: /\.css$/,
 		destRoot: path.join(root, 'out-editor-src'),
 		redirects: {
@@ -105,7 +105,7 @@ const minifyEditorAMDTask = task.define('minify-editor-amd', optimize.minifyTask
 const createESMSourcesAndResourcesTask = task.define('extract-editor-esm', () => {
 	standalone.createESMSourcesAndResources2({
 		srcFolder: './out-editor-src',
-		outFolder: './out-editor-esm',
+		outFolder: './out-monaco-editor-core/src',
 		outResourcesFolder: './out-monaco-editor-core/esm',
 		ignores: [
 			'inlineEntryPoint:0.ts',
@@ -121,16 +121,16 @@ const createESMSourcesAndResourcesTask = task.define('extract-editor-esm', () =>
 const compileEditorESMTask = task.define('compile-editor-esm', () => {
 	const KEEP_PREV_ANALYSIS = false;
 	const FAIL_ON_PURPOSE = false;
-	console.log(`Launching the TS compiler at ${path.join(__dirname, '../out-editor-esm')}...`);
+	console.log(`Launching the TS compiler at ${path.join(__dirname, '../out-monaco-editor-core/src')}...`);
 	let result;
 	if (process.platform === 'win32') {
-		result = cp.spawnSync(`..\\node_modules\\.bin\\tsc.cmd`, {
-			cwd: path.join(__dirname, '../out-editor-esm'),
+		result = cp.spawnSync(`..\\..\\node_modules\\.bin\\tsc.cmd`, {
+			cwd: path.join(__dirname, '../out-monaco-editor-core/src'),
 			shell: true
 		});
 	} else {
-		result = cp.spawnSync(`node`, [`../node_modules/.bin/tsc`], {
-			cwd: path.join(__dirname, '../out-editor-esm')
+		result = cp.spawnSync(`node`, [`../../node_modules/.bin/tsc`], {
+			cwd: path.join(__dirname, '../out-monaco-editor-core/src')
 		});
 	}
 
@@ -144,7 +144,7 @@ const compileEditorESMTask = task.define('compile-editor-esm', () => {
 		const cleanDestPath = (keepPrevAnalysis ? Promise.resolve() : util.rimraf(destPath)());
 		return cleanDestPath.then(() => {
 			// build a list of files to copy
-			const files = util.rreddir(path.join(__dirname, '../out-editor-esm'));
+			const files = util.rreddir(path.join(__dirname, '../out-monaco-editor-core/src'));
 
 			if (!keepPrevAnalysis) {
 				fs.mkdirSync(destPath);
@@ -238,6 +238,16 @@ function toExternalDTS(contents) {
 	}
 	return lines.join('\n').replace(/\n\n\n+/g, '\n\n');
 }
+
+const deleteIrrelevantSourceFiles = task.define('delete-irrelevant-source-files', async () => {
+	SRC_DIR = path.join(__dirname, '../out-monaco-editor-core/src');
+	await Promise.all(fs.readdirSync(SRC_DIR).map(file => {
+		if (file !== 'vs') {
+			return util.rimraf(path.join(SRC_DIR, file))();
+		}
+		return undefined;
+	}));
+});
 
 /**
  * @param {{ (path: string): boolean }} testFunc
@@ -356,17 +366,18 @@ gulp.task('editor-distro',
 			util.rimraf('out-editor-min')
 		),
 		extractEditorSrcTask,
-		task.parallel(
-			task.series(
-				compileEditorAMDTask,
-				bundleEditorAMDTask,
-				minifyEditorAMDTask
-			),
-			task.series(
-				createESMSourcesAndResourcesTask,
-				compileEditorESMTask,
-			)
+		// task.parallel(
+		// task.series(
+		//	compileEditorAMDTask,
+		//	bundleEditorAMDTask,
+		//	minifyEditorAMDTask
+		//),
+		task.series(
+			createESMSourcesAndResourcesTask,
+			compileEditorESMTask,
+			deleteIrrelevantSourceFiles
 		),
+		// ),
 		finalEditorResourcesTask
 	)
 );
